@@ -23,25 +23,13 @@ const writeFile = () => {
 };
 
 const makePassword = (pwd, un) => {
-  bcrypt.genSalt(12).then(
-    salt => {
-      bcrypt.hash(pwd, salt).then(
-        hash => {
-          authInfo[un] = {
-            pwd: hash,
-            salt
-          };
-          writeFile();
-        },
-        err => {
-          console.error("Error {} occurred while hashing password", err);
-        }
-      );
-    },
-    err => {
-      console.error("Error {} occurred while creating salt", err);
+  bcrypt.hash(pwd, 10).then((err, hash) => {
+    if (err) console.error("Could not hash password");
+    else {
+      authInfo[un] = hash;
+      writeFile();
     }
-  );
+  });
 };
 
 program.version("1.0.0").description("Manages a password file for a web app");
