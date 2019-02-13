@@ -23,13 +23,15 @@ const writeFile = () => {
 };
 
 const makePassword = (pwd, un) => {
-  bcrypt.hash(pwd, 10).then((err, hash) => {
-    if (err) console.error("Could not hash password");
-    else {
+  bcrypt
+    .hash(pwd, 10)
+    .then(hash => {
       authInfo[un] = hash;
       writeFile();
-    }
-  });
+    })
+    .catch(error => {
+      console.error("Could not create password");
+    });
 };
 
 program.version("1.0.0").description("Manages a password file for a web app");
