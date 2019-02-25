@@ -30,7 +30,7 @@ const makePassword = (pwd, un) => {
       writeFile();
     })
     .catch(error => {
-      console.error("Could not create password");
+      console.error("Could not create password " + error.message);
     });
 };
 
