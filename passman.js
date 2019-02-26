@@ -3,6 +3,7 @@ const program = require("commander");
 const fs = require("fs");
 const path = require("path");
 const bcrypt = require("bcrypt");
+var generator = require("generate-password");
 
 const AUTH_LOCATION = path.resolve(__dirname, "../auth.json");
 
@@ -23,11 +24,23 @@ const writeFile = () => {
 };
 
 const makePassword = (pwd, un) => {
+  let _pwd = pwd;
+  if (!_pwd) {
+    _pwd = generator.generate({
+      length: 10,
+      numbers: true,
+      symbols: true,
+      uppercase: true,
+      strict: true,
+      excludeSimilarCharacters: true
+    });
+  }
   bcrypt
-    .hash(pwd, 10)
+    .hash(_pwd, 10)
     .then(hash => {
       authInfo[un] = hash;
       writeFile();
+      if (!pwd) console.log("Your password is " + _pwd);
     })
     .catch(error => {
       console.error("Could not create password " + error.message);
@@ -37,7 +50,7 @@ const makePassword = (pwd, un) => {
 program.version("1.0.0").description("Manages a password file for a web app");
 
 program
-  .command("addLogin <username> <password>")
+  .command("addLogin <username> [password]")
   .alias("c")
   .description("Add a new login")
   .action((un, pwd) => {
@@ -51,7 +64,7 @@ program
   });
 
 program
-  .command("newPass <username> <password>")
+  .command("newPass <username> [password]")
   .alias("p")
   .description("Changes an existing user's password")
   .action((un, pwd) => {

@@ -10,7 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^3.0.4",
-    "commander": "^2.19.0"
+    "commander": "^2.19.0",
+    "generate-password": "^1.4.1"
   },
   "devDependencies": {
     "@types/node": "^11.9.3"
